@@ -53,10 +53,18 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../WarthogHolidayWork/main.cpp \
-		../WarthogHolidayWork/mainwindow.cpp moc_mainwindow.cpp
+		../WarthogHolidayWork/dialog.cpp \
+		../WarthogHolidayWork/player.cpp \
+		../WarthogHolidayWork/position.cpp \
+		../WarthogHolidayWork/robot.cpp \
+		../WarthogHolidayWork/team.cpp moc_dialog.cpp
 OBJECTS       = main.o \
-		mainwindow.o \
-		moc_mainwindow.o
+		dialog.o \
+		player.o \
+		position.o \
+		robot.o \
+		team.o \
+		moc_dialog.o
 DIST          = ../../../../Qt/5.12.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.12.2/gcc_64/mkspecs/common/unix.conf \
 		../../../../Qt/5.12.2/gcc_64/mkspecs/common/linux.conf \
@@ -230,8 +238,16 @@ DIST          = ../../../../Qt/5.12.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.12.2/gcc_64/mkspecs/features/exceptions.prf \
 		../../../../Qt/5.12.2/gcc_64/mkspecs/features/yacc.prf \
 		../../../../Qt/5.12.2/gcc_64/mkspecs/features/lex.prf \
-		../WarthogHolidayWork/WarthogHolidayWork.pro ../WarthogHolidayWork/mainwindow.h ../WarthogHolidayWork/main.cpp \
-		../WarthogHolidayWork/mainwindow.cpp
+		../WarthogHolidayWork/WarthogHolidayWork.pro ../WarthogHolidayWork/dialog.h \
+		../WarthogHolidayWork/player.h \
+		../WarthogHolidayWork/position.h \
+		../WarthogHolidayWork/robot.h \
+		../WarthogHolidayWork/team.h ../WarthogHolidayWork/main.cpp \
+		../WarthogHolidayWork/dialog.cpp \
+		../WarthogHolidayWork/player.cpp \
+		../WarthogHolidayWork/position.cpp \
+		../WarthogHolidayWork/robot.cpp \
+		../WarthogHolidayWork/team.cpp
 QMAKE_TARGET  = WarthogHolidayWork
 DESTDIR       = 
 TARGET        = WarthogHolidayWork
@@ -240,7 +256,7 @@ TARGET        = WarthogHolidayWork
 first: all
 ####### Build rules
 
-WarthogHolidayWork: ui_mainwindow.h $(OBJECTS)  
+WarthogHolidayWork: ui_dialog.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../WarthogHolidayWork/WarthogHolidayWork.pro ../../../../Qt/5.12.2/gcc_64/mkspecs/linux-g++/qmake.conf ../../../../Qt/5.12.2/gcc_64/mkspecs/features/spec_pre.prf \
@@ -613,9 +629,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt/5.12.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../WarthogHolidayWork/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../WarthogHolidayWork/main.cpp ../WarthogHolidayWork/mainwindow.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../WarthogHolidayWork/mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../WarthogHolidayWork/dialog.h ../WarthogHolidayWork/player.h ../WarthogHolidayWork/position.h ../WarthogHolidayWork/robot.h ../WarthogHolidayWork/team.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../WarthogHolidayWork/main.cpp ../WarthogHolidayWork/dialog.cpp ../WarthogHolidayWork/player.cpp ../WarthogHolidayWork/position.cpp ../WarthogHolidayWork/robot.cpp ../WarthogHolidayWork/team.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../WarthogHolidayWork/dialog.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -647,12 +663,12 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../../../Qt/5.12.2/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h ../../../../Qt/5.12.2/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_dialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
-moc_mainwindow.cpp: ../WarthogHolidayWork/mainwindow.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QMainWindow \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qmainwindow.h \
+	-$(DEL_FILE) moc_dialog.cpp
+moc_dialog.cpp: ../WarthogHolidayWork/dialog.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QDialog \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qdialog.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtguiglobal.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/qglobal.h \
@@ -755,26 +771,39 @@ moc_mainwindow.cpp: ../WarthogHolidayWork/mainwindow.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/qfiledevice.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtouchdevice.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtabwidget.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/qicon.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/QPainter \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/QDebug \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsScene \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsView \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsview.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpainter.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtextoption.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsItem \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsitem.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/QTimer \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtimer.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbasictimer.h \
+		../WarthogHolidayWork/robot.h \
+		../WarthogHolidayWork/player.h \
+		../WarthogHolidayWork/position.h \
 		moc_predefs.h \
 		../../../../Qt/5.12.2/gcc_64/bin/moc
-	/home/breno/Qt/5.12.2/gcc_64/bin/moc $(DEFINES) --include /home/breno/Github/WarthogHolidayWork/Qt/build-WarthogHolidayWork-Desktop_Qt_5_12_2_GCC_64bit-Debug/moc_predefs.h -I/home/breno/Qt/5.12.2/gcc_64/mkspecs/linux-g++ -I/home/breno/Github/WarthogHolidayWork/Qt/WarthogHolidayWork -I/home/breno/Qt/5.12.2/gcc_64/include -I/home/breno/Qt/5.12.2/gcc_64/include/QtWidgets -I/home/breno/Qt/5.12.2/gcc_64/include/QtGui -I/home/breno/Qt/5.12.2/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../WarthogHolidayWork/mainwindow.h -o moc_mainwindow.cpp
+	/home/breno/Qt/5.12.2/gcc_64/bin/moc $(DEFINES) --include /home/breno/Github/WarthogHolidayWork/Qt/build-WarthogHolidayWork-Desktop_Qt_5_12_2_GCC_64bit-Debug/moc_predefs.h -I/home/breno/Qt/5.12.2/gcc_64/mkspecs/linux-g++ -I/home/breno/Github/WarthogHolidayWork/Qt/WarthogHolidayWork -I/home/breno/Qt/5.12.2/gcc_64/include -I/home/breno/Qt/5.12.2/gcc_64/include/QtWidgets -I/home/breno/Qt/5.12.2/gcc_64/include/QtGui -I/home/breno/Qt/5.12.2/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../WarthogHolidayWork/dialog.h -o moc_dialog.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_dialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
-ui_mainwindow.h: ../WarthogHolidayWork/mainwindow.ui \
+	-$(DEL_FILE) ui_dialog.h
+ui_dialog.h: ../WarthogHolidayWork/dialog.ui \
 		../../../../Qt/5.12.2/gcc_64/bin/uic
-	/home/breno/Qt/5.12.2/gcc_64/bin/uic ../WarthogHolidayWork/mainwindow.ui -o ui_mainwindow.h
+	/home/breno/Qt/5.12.2/gcc_64/bin/uic ../WarthogHolidayWork/dialog.ui -o ui_dialog.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -786,9 +815,9 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-main.o: ../WarthogHolidayWork/main.cpp ../WarthogHolidayWork/mainwindow.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QMainWindow \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qmainwindow.h \
+main.o: ../WarthogHolidayWork/main.cpp ../WarthogHolidayWork/dialog.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QDialog \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qdialog.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtguiglobal.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/qglobal.h \
@@ -891,12 +920,25 @@ main.o: ../WarthogHolidayWork/main.cpp ../WarthogHolidayWork/mainwindow.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/qfiledevice.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtouchdevice.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtabwidget.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/qicon.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/QPainter \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/QDebug \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsScene \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsView \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsview.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpainter.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtextoption.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsItem \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsitem.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/QTimer \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtimer.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbasictimer.h \
+		../WarthogHolidayWork/robot.h \
+		../WarthogHolidayWork/player.h \
+		../WarthogHolidayWork/position.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QApplication \
 		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qapplication.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcoreapplication.h \
@@ -906,9 +948,9 @@ main.o: ../WarthogHolidayWork/main.cpp ../WarthogHolidayWork/mainwindow.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qinputmethod.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../WarthogHolidayWork/main.cpp
 
-mainwindow.o: ../WarthogHolidayWork/mainwindow.cpp ../WarthogHolidayWork/mainwindow.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QMainWindow \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qmainwindow.h \
+dialog.o: ../WarthogHolidayWork/dialog.cpp ../WarthogHolidayWork/dialog.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QDialog \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qdialog.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtguiglobal.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/qglobal.h \
@@ -1011,13 +1053,26 @@ mainwindow.o: ../WarthogHolidayWork/mainwindow.cpp ../WarthogHolidayWork/mainwin
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/qfiledevice.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qvector2d.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtouchdevice.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtabwidget.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/qicon.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/QPainter \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/QDebug \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsScene \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsView \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsview.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpainter.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtextoption.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpen.h \
-		ui_mainwindow.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsItem \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsitem.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/QTimer \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtimer.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbasictimer.h \
+		../WarthogHolidayWork/robot.h \
+		../WarthogHolidayWork/player.h \
+		../WarthogHolidayWork/position.h \
+		ui_dialog.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/QVariant \
 		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QApplication \
 		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qapplication.h \
@@ -1025,14 +1080,255 @@ mainwindow.o: ../WarthogHolidayWork/mainwindow.cpp ../WarthogHolidayWork/mainwin
 		../../../../Qt/5.12.2/gcc_64/include/QtCore/qeventloop.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		../../../../Qt/5.12.2/gcc_64/include/QtGui/qguiapplication.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtGui/qinputmethod.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QStatusBar \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qstatusbar.h \
-		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QWidget
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../WarthogHolidayWork/mainwindow.cpp
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qinputmethod.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dialog.o ../WarthogHolidayWork/dialog.cpp
 
-moc_mainwindow.o: moc_mainwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+player.o: ../WarthogHolidayWork/player.cpp ../WarthogHolidayWork/player.h \
+		../WarthogHolidayWork/position.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsScene \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringview.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qrect.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qmargins.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsize.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qbrush.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qcolor.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qrgb.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qrgba64.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qmatrix.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpolygon.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qregion.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qdatastream.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qline.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtransform.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpainterpath.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qimage.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpixelformat.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpixmap.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qfont.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsView \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsview.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpainter.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtextoption.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qfontinfo.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qwidget.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpalette.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qcursor.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qkeysequence.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qevent.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qset.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qurl.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qurlquery.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qvector2d.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsItem \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsitem.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o ../WarthogHolidayWork/player.cpp
+
+position.o: ../WarthogHolidayWork/position.cpp ../WarthogHolidayWork/position.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o position.o ../WarthogHolidayWork/position.cpp
+
+robot.o: ../WarthogHolidayWork/robot.cpp ../WarthogHolidayWork/robot.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/QDebug \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringliteral.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringview.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qset.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsScene \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtguiglobal.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtgui-config.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qrect.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qmargins.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qsize.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qbrush.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qcolor.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qrgb.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qrgba64.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qmatrix.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpolygon.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qregion.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qdatastream.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qline.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtransform.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpainterpath.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qimage.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpixelformat.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpixmap.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qfont.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpen.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsView \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsview.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpainter.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtextoption.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qfontinfo.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qframe.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qwidget.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qpalette.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qcursor.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qkeysequence.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qevent.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qurl.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qurlquery.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qfile.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtCore/qfiledevice.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qvector2d.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/QGraphicsItem \
+		../../../../Qt/5.12.2/gcc_64/include/QtWidgets/qgraphicsitem.h \
+		../WarthogHolidayWork/player.h \
+		../WarthogHolidayWork/position.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o robot.o ../WarthogHolidayWork/robot.cpp
+
+team.o: ../WarthogHolidayWork/team.cpp ../WarthogHolidayWork/team.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o team.o ../WarthogHolidayWork/team.cpp
+
+moc_dialog.o: moc_dialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_dialog.o moc_dialog.cpp
 
 ####### Install
 

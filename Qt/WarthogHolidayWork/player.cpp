@@ -18,6 +18,7 @@ void Player::draw()
 
 }
 
+
 //----- Getters and Setters -----//
 void Player::setPosition(Position newPos)
 {
@@ -25,7 +26,7 @@ void Player::setPosition(Position newPos)
     pos->setX(newPos.getX());
     pos->setY(newPos.getY());
     pos->setAngle(newPos.getAngle());
-
+    draw();
 }
 
 int Player::getId() const
@@ -56,5 +57,15 @@ int Player::getRadius() const
 void Player::setRadius(int value)
 {
     radius = value;
+}
+
+Position *Player::getPos() const
+{
+    return pos;
+}
+
+void Player::setPos(Position *value)
+{
+    pos = value;
 }
 

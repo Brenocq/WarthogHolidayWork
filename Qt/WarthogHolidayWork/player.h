@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QDebug>
 
 enum teamColor{blue, red};
 
@@ -23,6 +24,8 @@ public:
     void setTeam(int value);
     int getRadius() const;
     void setRadius(int value);
+    Position *getPos() const;
+    void setPos(Position *value);
 
 protected:
     QGraphicsScene *scene;

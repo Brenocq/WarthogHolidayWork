@@ -25,13 +25,13 @@ public:
 
 public slots:
     void update();
+    void updatePathPlanning();
 
 private:
     Ui::Dialog *ui;
     QGraphicsScene *scene;
-    QGraphicsEllipseItem *ellipse;
-    QGraphicsRectItem *rectangle;
-    QGraphicsTextItem *text;
+    QGraphicsEllipseItem *selection;
+    QGraphicsRectItem *destination;
     QTimer *timer;
     Team *teams[2];
 };

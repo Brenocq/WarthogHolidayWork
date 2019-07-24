@@ -27,16 +27,20 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         dialog.cpp \
+        navigationalgorithm.cpp \
         player.cpp \
         position.cpp \
         robot.cpp \
+        straightline.cpp \
         team.cpp
 
 HEADERS += \
         dialog.h \
+        navigationalgorithm.h \
         player.h \
         position.h \
         robot.h \
+        straightline.h \
         team.h
 
 FORMS += \
@@ -46,3 +50,5 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+STATECHARTS +=

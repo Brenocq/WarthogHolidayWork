@@ -1,7 +1,6 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-#include <QDebug>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -16,6 +15,7 @@ public:
     void draw();
 private:
     QGraphicsEllipseItem *head;
+    QGraphicsTextItem *textId;
 };
 
 #endif // ROBOT_H

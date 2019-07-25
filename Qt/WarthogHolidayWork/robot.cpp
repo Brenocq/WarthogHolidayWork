@@ -42,7 +42,9 @@ void Robot::update()
         pos->setX(float(-body->pos().x()));
         pos->setY(float(-body->pos().y()));
     }
-
+    // Generate path
+    navAlg->setStart(pos);
+    navAlg->generatePath();
     // Draw current robot
     draw();
 }
@@ -56,6 +58,30 @@ void Robot::draw()
     }else if(team==red){
         head->setX(cos((pos->getAngle()-180)/180*M_PI)*14);
         head->setY(sin((pos->getAngle()-180)/180*M_PI)*14);
+    }
+}
+
+void Robot::setDestination(Position *pos)
+{
+    navAlg->setEnd(pos);
+}
+
+void Robot::move(){
+    QVector<Position*> path = navAlg->getPath();
+    if(id==0){
+        qDebug() << pos->getX()<<","<<pos->getY() << ")->("<<path.back()->getX()<<","<<path.back()->getY()<<")";
+    }
+    while(pos->distanceTo(*(path.back()))<5 && path.size()>1){
+        path.pop_back();
+    }
+    if(path.size()>1){
+        QVector2D moveVector;
+        moveVector = pos->toVector()-path.back()->toVector();
+        moveVector.normalize();
+        float newX = pos->getX()+moveVector.x();
+        float newY = pos->getY()+moveVector.y();
+        pos->setX(newX);
+        pos->setY(newY);
     }
 }
 

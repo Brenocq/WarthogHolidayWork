@@ -5,9 +5,10 @@
 class StraightLine : public NavigationAlgorithm
 {
 public:
+    StraightLine();
     StraightLine(Position* _start, Position* _end);
-
-     void generatePath();
+    ~StraightLine();
+    void generatePath();
 };
 
 #endif // STRAIGHTLINE_H

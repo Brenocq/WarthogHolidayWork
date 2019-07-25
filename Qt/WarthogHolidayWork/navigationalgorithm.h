@@ -1,26 +1,31 @@
 #ifndef NAVIGATIONALGORITHM_H
 #define NAVIGATIONALGORITHM_H
 #include "position.h"
-#include "player.h"
 #include <QVector>
+#include <QDebug>
 
 class NavigationAlgorithm
 {
 public:
+    NavigationAlgorithm();
     NavigationAlgorithm(Position* _start, Position* _end);
-    virtual ~NavigationAlgorithm()=0;
+    virtual ~NavigationAlgorithm();
 
-    virtual void generatePath()=0;
+    virtual void generatePath();
     Position nextPos();
     //----- Getters and Setters -----//
-    QVector<Player> getObstacles() const;
-    void setObstacles(const QVector<Player> &value);
+    QVector<Position*> getObstacles() const;
+    void setObstacles(const QVector<Position*> &value);
     QVector<Position*> getPath() const;
+    Position *getStart() const;
+    void setStart(Position *value);
+    void setEnd(Position *value);
+    Position *getEnd() const;
 
-private:
+protected:
     Position* start;
     Position* end;
-    QVector<Player> obstacles;
+    QVector<Position*> obstacles;
     QVector<Position*> path;
 };
 

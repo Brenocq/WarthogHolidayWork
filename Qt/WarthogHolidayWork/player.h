@@ -1,7 +1,11 @@
+#pragma once
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
 #include "position.h"
+#include "navigationalgorithm.h"
+#include "straightline.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -26,11 +30,14 @@ public:
     void setRadius(int value);
     Position *getPos() const;
     void setPos(Position *value);
+    NavigationAlgorithm *getNavAlg() const;
+    void setNavAlg(NavigationAlgorithm *value);
 
 protected:
     QGraphicsScene *scene;
     QGraphicsEllipseItem *body;
     Position* pos;
+    NavigationAlgorithm *navAlg;
 
     int id;
     int team;

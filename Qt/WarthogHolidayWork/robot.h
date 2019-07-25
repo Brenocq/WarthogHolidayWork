@@ -13,6 +13,9 @@ public:
 
     void update();
     void draw();
+    void setDestination(Position *pos);
+    void move();
+
 private:
     QGraphicsEllipseItem *head;
     QGraphicsTextItem *textId;

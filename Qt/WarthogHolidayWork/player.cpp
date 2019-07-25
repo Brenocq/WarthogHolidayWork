@@ -4,6 +4,7 @@ Player::Player(int _id, int _team):
     id(_id), team(_team), radius(25)
 {
     pos = new Position(0,0,0);
+    navAlg = new StraightLine(pos, pos);
 }
 
 void Player::draw()
@@ -67,5 +68,17 @@ Position *Player::getPos() const
 void Player::setPos(Position *value)
 {
     pos = value;
+}
+
+NavigationAlgorithm *Player::getNavAlg() const
+{
+    return navAlg;
+}
+
+void Player::setNavAlg(NavigationAlgorithm *value)
+{
+    value->setEnd(navAlg->getEnd());
+    value->setStart(navAlg->getStart());
+    navAlg = value;
 }
 

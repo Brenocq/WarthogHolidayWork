@@ -2,7 +2,7 @@
 #include <QtMath>
 
 Position::Position(float _x, float _y, float _angle):
-    x(_x),y(_y),angle(_angle)
+    x(_x),y(_y),angle(_angle), team(blue)
 {
     angle<0?angle+=360:angle;
     angle>360?angle-=360:angle;
@@ -59,6 +59,16 @@ void Position::setNewPosition(float _x, float _y, float _angle)
     x=_x;
     y=_y;
     angle=_angle;
+}
+
+int Position::getTeam() const
+{
+    return team;
+}
+
+void Position::setTeam(int value)
+{
+    team = value;
 }
 
 

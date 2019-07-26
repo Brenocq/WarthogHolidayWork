@@ -37,8 +37,10 @@ private:
     QGraphicsEllipseItem *selection;
     QGraphicsRectItem *destination;
     QVector<QVector<QGraphicsLineItem*>> lines;
+    QVector<QVector<QGraphicsEllipseItem*>> dots;
     QTimer *timer;
     QTimer *timerMove;
+    Robot *selectedRobot;
     int qtdRobots;
     Team *teams[2];
     bool isRunning;

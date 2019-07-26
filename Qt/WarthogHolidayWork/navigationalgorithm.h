@@ -3,6 +3,7 @@
 #include "position.h"
 #include <QVector>
 #include <QDebug>
+#include <QtMath>
 
 class NavigationAlgorithm
 {

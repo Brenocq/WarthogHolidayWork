@@ -68,20 +68,23 @@ void Robot::setDestination(Position *pos)
 
 void Robot::move(){
     QVector<Position*> path = navAlg->getPath();
-    if(id==0){
-        qDebug() << pos->getX()<<","<<pos->getY() << ")->("<<path.back()->getX()<<","<<path.back()->getY()<<")";
-    }
     while(pos->distanceTo(*(path.back()))<5 && path.size()>1){
         path.pop_back();
     }
     if(path.size()>1){
         QVector2D moveVector;
-        moveVector = pos->toVector()-path.back()->toVector();
+        moveVector = path.back()->toVector()-pos->toVector();
         moveVector.normalize();
+        moveVector = moveVector*5;// To move at least 1 pixel
         float newX = pos->getX()+moveVector.x();
         float newY = pos->getY()+moveVector.y();
-        pos->setX(newX);
-        pos->setY(newY);
+        if(team==blue){
+            body->setX(int(newX));
+            body->setY(int(newY));
+        }else{
+            body->setX(int(-newX));
+            body->setY(int(-newY));
+        }
     }
 }
 

@@ -18,15 +18,15 @@ StraightLine::~StraightLine()
 
 void StraightLine::generatePath()
 {
-    path.clear();
+    NavigationAlgorithm::generatePath();// Clean old path
     float distance = start->distanceTo(*end);
-    int resolution = 100;// Number of points in the path
+    int resolution = 20;// Number of points in the path
     QVector2D startV2;
-    startV2 = end->toVector()-start->toVector();
+    startV2 = start->toVector()-end->toVector();
     startV2.normalize();
     startV2 = startV2*distance/resolution;
 
-    Position *nextPos = new Position(start->getX()+startV2.x(),start->getY()+startV2.y(),0);
+    Position *nextPos = new Position(end->getX(),end->getY(),0);
     path.push_back(nextPos);
     for (int i=0;i<resolution;i++) {
         nextPos = new Position(0,0,0);

@@ -1,6 +1,7 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 #include "straightline.h"
+#include "potentialfield.h"
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -35,7 +36,7 @@ Dialog::Dialog(QWidget *parent) :
     // Move every 20ms
     timerMove = new QTimer(this);
     QObject::connect(timerMove, SIGNAL(timeout()), this, SLOT(moveRobots()));
-    timerMove->start(100);
+    timerMove->start(20);
 
     // Create selection ellipse
     QBrush infillBrush(QColor(0,0,0,0));// Without infill
@@ -49,16 +50,41 @@ Dialog::Dialog(QWidget *parent) :
     destination->setFlag(QGraphicsItem::ItemIsMovable, true);
 
     // Create path lines
-    for (int i=0;i<qtdRobots*2;i++) {
-        QVector<QGraphicsLineItem*> linesPath;
-        lines.push_back(linesPath);
-    }
+    lines.resize(qtdRobots*2);
+    dots.resize(qtdRobots*2);
 
     // Update selected robot
     connect(ui->teamComboBox, SIGNAL(activated(int)), this, SLOT(updatePathPlanning()));
     connect(ui->numberComboBox, SIGNAL(activated(int)), this, SLOT(updatePathPlanning()));
     connect(ui->runButton, SIGNAL (released()),this, SLOT (runOrPause()));
     updatePathPlanning();
+
+    //----- Update obstacles -----//
+    for (int i=0;i<qtdRobots*2;i++){
+        QVector<Position*> *robotObstacles = new QVector<Position*>;// Position of all robots except robot i
+        int team = blue;
+        int robotNum = i;
+        if(i>=qtdRobots){
+            robotNum-=qtdRobots;
+            team = red;
+        }
+        for (int j=0;j<qtdRobots*2;j++){
+            if(j!=i){
+                int obsTeam = blue;// Obstacle team
+                int obsNum = j;
+                if(j>=qtdRobots){
+                    obsNum-=qtdRobots;
+                    obsTeam = red;
+                }
+
+                Robot *obsRobot = teams[obsTeam]->getRobot(obsNum);
+                Position *obsPos = obsRobot->getPos();
+                robotObstacles->push_back(obsPos);
+            }
+        }
+        Robot *robot = teams[team]->getRobot(robotNum);
+        robot->getNavAlg()->setObstacles(*robotObstacles);
+    }
 }
 
 Dialog::~Dialog()
@@ -100,9 +126,13 @@ void Dialog::updatePathPlanning(){
     ui->teamComboBox->currentText()=="Blue"? teamNum=blue: teamNum=red ;
     textRobotNum = ui->numberComboBox->currentText();
     robotNum = textRobotNum.split(" ")[1].toInt();
+
+    iniPos->setTeam(teamNum);
+    endPos->setTeam(teamNum);
+    selectedRobot=teams[teamNum]->getRobot(robotNum);
     //----- Update square position -----//
     if(lastTeamNum!=teamNum || lastRobotNum!=robotNum){
-        Position* pos = teams[teamNum]->getRobot(robotNum)->getNavAlg()->getEnd();
+        Position* pos = selectedRobot->getNavAlg()->getEnd();
         if(teamNum==0){
             destination->setX(int(pos->getX()));
             destination->setY(int(pos->getY()));
@@ -115,19 +145,17 @@ void Dialog::updatePathPlanning(){
     }
 
     if(teamNum==blue){
-        iniPos->setX(int(teams[teamNum]->getRobot(robotNum)->getPos()->getX()));
-        iniPos->setY(int(teams[teamNum]->getRobot(robotNum)->getPos()->getY()));
+        iniPos->setX(int(selectedRobot->getPos()->getX()));
+        iniPos->setY(int(selectedRobot->getPos()->getY()));
         endPos->setX(int(destination->pos().x()));
         endPos->setY(int(destination->pos().y()));
 
     }else{
-        iniPos->setX(-int(teams[teamNum]->getRobot(robotNum)->getPos()->getX()));
-        iniPos->setY(-int(teams[teamNum]->getRobot(robotNum)->getPos()->getY()));
+        iniPos->setX(-int(selectedRobot->getPos()->getX()));
+        iniPos->setY(-int(selectedRobot->getPos()->getY()));
         endPos->setX(-int(destination->pos().x()));
         endPos->setY(-int(destination->pos().y()));
     }
-    selection->setX(int(iniPos->getX()-30));
-    selection->setY(int(iniPos->getY()-30));
     ui->pathLabel->setText("(" +
                            QString::number(int(iniPos->getX()))+
                            ","+
@@ -138,11 +166,11 @@ void Dialog::updatePathPlanning(){
                            QString::number(int(endPos->getY()))+
                            ")");
 
-    teams[teamNum]->getRobot(robotNum)->setDestination(endPos);
+    selectedRobot->setDestination(endPos);
     if(strNavAlg=="Straight Line"){
-        teams[teamNum]->getRobot(robotNum)->setNavAlg(new StraightLine());
+        selectedRobot->setNavAlg(new StraightLine());
     }else if(strNavAlg == "PF"){
-
+        selectedRobot->setNavAlg(new PotentialField());
     }else if(strNavAlg == "A*"){
 
     }
@@ -150,7 +178,7 @@ void Dialog::updatePathPlanning(){
 
 void Dialog::showPaths()
 {
-    // Path blue team
+    //----- Path blue team -----//
     Robot* robot;
     for(int i=0;i<qtdRobots;i++) {
         robot = teams[0]->getRobot(i);
@@ -160,18 +188,27 @@ void Dialog::showPaths()
         // Clear old lines
         for (int j=0;j<lines[i].size();j++) {
             scene->removeItem(lines[i][j]);
+            delete lines[i][j];
+        }
+        // Clear old dots
+        for (int j=0;j<dots[i].size();j++) {
+            scene->removeItem(dots[i][j]);
+            delete dots[i][j];
         }
         lines[i].clear();
+        dots[i].clear();
         for (int j=1;j<pathSize;j++) {
             Position* pos1 = path[pathSize-j];
             Position* pos2 = path[pathSize-j-1];
             QLineF line(qreal(pos1->getX()),qreal(pos1->getY()) , qreal(pos2->getX()),qreal(pos2->getY()));
             QPen linePen(QColor(0,0,255,255));
+            QBrush circleBrush(QColor(50,50,200));
 
             lines[i].push_back(scene->addLine(line, linePen));
+            dots[i].push_back(scene->addEllipse(pos1->getX()-2, pos1->getY()-2, 4, 4, linePen, circleBrush));
         }
     }
-    // Path red team
+    //----- Path red team -----//
     for(int i=0;i<qtdRobots;i++) {
         robot = teams[1]->getRobot(i);
         QVector<Position*> path = robot->getNavAlg()->getPath();
@@ -180,20 +217,44 @@ void Dialog::showPaths()
         // Clear old lines
         for (int j=0;j<lines[i+qtdRobots].size();j++) {
             scene->removeItem(lines[i+qtdRobots][j]);
+            delete lines[i+qtdRobots][j];
+        }
+        // Clear old dots
+        for (int j=0;j<dots[i+qtdRobots].size();j++) {
+            scene->removeItem(dots[i+qtdRobots][j]);
+            delete dots[i+qtdRobots][j];
         }
         lines[i+qtdRobots].clear();
+        dots[i+qtdRobots].clear();
         for (int j=1;j<pathSize;j++) {
             Position* pos1 = path[pathSize-j];
             Position* pos2 = path[pathSize-j-1];
             QLineF line(qreal(-pos1->getX()),qreal(-pos1->getY()) , qreal(-pos2->getX()),qreal(-pos2->getY()));
             QPen linePen(QColor(255,0,0,255));
+            QBrush circleBrush(QColor(200,50,50));
 
             lines[i+qtdRobots].push_back(scene->addLine(line, linePen));
+            dots[i+qtdRobots].push_back(scene->addEllipse(-pos1->getX()-2, -pos1->getY()-2, 4, 4, linePen, circleBrush));
         }
     }
+    //----- Update selection circle -----//
+    float selecX = selectedRobot->getPos()->getX();
+    float selecY = selectedRobot->getPos()->getY();
+    if(selectedRobot->getTeam()==red){
+        selecX*=-1;
+        selecY*=-1;
+    }
+
+    selection->setX(int(selecX-30));
+    selection->setY(int(selecY-30));
 }
 
 void Dialog::runOrPause()
 {
     isRunning=!isRunning;
+    if(isRunning){
+        ui->runButton->setText("Pause");
+    }else{
+        ui->runButton->setText("Run");
+    }
 }

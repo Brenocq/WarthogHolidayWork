@@ -2,12 +2,11 @@
 
 NavigationAlgorithm::NavigationAlgorithm()
 {
-
 }
 
 NavigationAlgorithm::NavigationAlgorithm(Position* _start, Position* _end):
     start(_start), end(_end)
-{
+{ 
 }
 
 NavigationAlgorithm::~NavigationAlgorithm()
@@ -17,7 +16,10 @@ NavigationAlgorithm::~NavigationAlgorithm()
 
 void NavigationAlgorithm::generatePath()
 {
-
+    for (int i=0;i<path.size();i++) {
+        //delete path[i]; TODO uncomment and fix crash
+    }
+    path.clear();
 }
 
 Position NavigationAlgorithm::nextPos()

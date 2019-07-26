@@ -30,6 +30,7 @@ SOURCES += \
         navigationalgorithm.cpp \
         player.cpp \
         position.cpp \
+        potentialfield.cpp \
         robot.cpp \
         straightline.cpp \
         team.cpp
@@ -39,6 +40,7 @@ HEADERS += \
         navigationalgorithm.h \
         player.h \
         position.h \
+        potentialfield.h \
         robot.h \
         straightline.h \
         team.h

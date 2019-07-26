@@ -4,6 +4,7 @@ Player::Player(int _id, int _team):
     id(_id), team(_team), radius(25)
 {
     pos = new Position(0,0,0);
+    pos->setTeam(team);
     navAlg = new StraightLine(pos, pos);
 }
 
@@ -79,6 +80,7 @@ void Player::setNavAlg(NavigationAlgorithm *value)
 {
     value->setEnd(navAlg->getEnd());
     value->setStart(navAlg->getStart());
+    value->setObstacles(navAlg->getObstacles());
     navAlg = value;
 }
 

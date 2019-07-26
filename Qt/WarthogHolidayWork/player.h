@@ -11,8 +11,6 @@
 #include <QGraphicsItem>
 #include <QDebug>
 
-enum teamColor{blue, red};
-
 class Player
 {
 public:

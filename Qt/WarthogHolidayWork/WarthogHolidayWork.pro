@@ -25,22 +25,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        astar.cpp \
         main.cpp \
         dialog.cpp \
         navigationalgorithm.cpp \
         player.cpp \
         position.cpp \
         potentialfield.cpp \
+        quadtree.cpp \
         robot.cpp \
         straightline.cpp \
         team.cpp
 
 HEADERS += \
+        astar.h \
         dialog.h \
         navigationalgorithm.h \
         player.h \
         position.h \
         potentialfield.h \
+        quadtree.h \
         robot.h \
         straightline.h \
         team.h

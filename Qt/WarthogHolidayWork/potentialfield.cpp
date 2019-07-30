@@ -13,6 +13,7 @@ PotentialField::PotentialField(Position* _start, Position* _end):
 
 PotentialField::~PotentialField()
 {
+
 }
 
 void PotentialField::generatePath()

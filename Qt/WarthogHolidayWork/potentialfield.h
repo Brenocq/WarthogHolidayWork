@@ -2,7 +2,7 @@
 #define POTENTIALFIELD_H
 #include "navigationalgorithm.h"
 
-class PotentialField : public NavigationAlgorithm
+class PotentialField: public NavigationAlgorithm
 {
 public:
     PotentialField();

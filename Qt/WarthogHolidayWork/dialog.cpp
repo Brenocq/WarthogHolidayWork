@@ -2,6 +2,7 @@
 #include "ui_dialog.h"
 #include "straightline.h"
 #include "potentialfield.h"
+#include "astar.h"
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -20,7 +21,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->teamComboBox->addItem("Red");
     ui->navComboBox->addItem("Straight Line");
     ui->navComboBox->addItem("PF");
-    ui->navComboBox->addItem("A*");
+    ui->navComboBox->addItem("QuadTree + A*");
     for (int i=0;i<4;i++) {
         ui->numberComboBox->addItem("Robot " + QString::number(i));
     }
@@ -171,8 +172,10 @@ void Dialog::updatePathPlanning(){
         selectedRobot->setNavAlg(new StraightLine());
     }else if(strNavAlg == "PF"){
         selectedRobot->setNavAlg(new PotentialField());
-    }else if(strNavAlg == "A*"){
-
+    }else if(strNavAlg == "QuadTree + A*"){
+        AStar *aStar = new AStar();
+        aStar->setScene(scene);
+        selectedRobot->setNavAlg(aStar);
     }
 }
 

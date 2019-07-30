@@ -11,6 +11,7 @@
 #include <QTimer>
 #include <QVector>
 #include "team.h"
+#include "quadtree.h"
 
 namespace Ui {
 class Dialog;
@@ -43,6 +44,7 @@ private:
     Robot *selectedRobot;
     int qtdRobots;
     Team *teams[2];
+    QuadTree *qtree;
     bool isRunning;
 };
 #endif // DIALOG_H

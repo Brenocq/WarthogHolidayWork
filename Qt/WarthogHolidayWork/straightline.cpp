@@ -36,3 +36,13 @@ void StraightLine::generatePath()
         path+=nextPos;
     }
 }
+
+void StraightLine::draw()
+{
+
+}
+
+void StraightLine::clean()
+{
+
+}

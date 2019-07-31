@@ -9,6 +9,8 @@ public:
     StraightLine(Position* _start, Position* _end);
     ~StraightLine();
     void generatePath();
+    void draw();
+    void clean();
 };
 
 #endif // STRAIGHTLINE_H

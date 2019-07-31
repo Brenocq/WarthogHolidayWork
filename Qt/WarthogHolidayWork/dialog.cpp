@@ -117,6 +117,7 @@ void Dialog::moveRobots()
 void Dialog::updatePathPlanning(){
     static int lastTeamNum=-1;
     static int lastRobotNum=-1;
+    static QString selectedNav = "Straight Line";
     //----- Define robot team and number -----//
     int teamNum;
     QString textRobotNum;
@@ -141,8 +142,6 @@ void Dialog::updatePathPlanning(){
             destination->setX(int(-pos->getX()));
             destination->setY(int(-pos->getY()));
         }
-        lastTeamNum = teamNum;
-        lastRobotNum = robotNum;
     }
 
     if(teamNum==blue){
@@ -168,15 +167,24 @@ void Dialog::updatePathPlanning(){
                            ")");
 
     selectedRobot->setDestination(endPos);
-    if(strNavAlg=="Straight Line"){
-        selectedRobot->setNavAlg(new StraightLine());
-    }else if(strNavAlg == "PF"){
-        selectedRobot->setNavAlg(new PotentialField());
-    }else if(strNavAlg == "QuadTree + A*"){
-        AStar *aStar = new AStar();
-        aStar->setScene(scene);
-        selectedRobot->setNavAlg(aStar);
+    if(lastTeamNum!=teamNum || lastRobotNum!=robotNum || selectedNav!=strNavAlg){
+        if(selectedNav!=strNavAlg){
+            teams[lastTeamNum]->getRobot(lastRobotNum)->getNavAlg()->clean();
+        }
+
+        if(strNavAlg=="Straight Line"){
+            selectedRobot->setNavAlg(new StraightLine());
+        }else if(strNavAlg == "PF"){
+            selectedRobot->setNavAlg(new PotentialField());
+        }else if(strNavAlg == "QuadTree + A*"){
+            AStar *aStar = new AStar();
+            aStar->setScene(scene);
+            selectedRobot->setNavAlg(aStar);
+        }
     }
+    lastTeamNum = teamNum;
+    lastRobotNum = robotNum;
+    selectedNav = strNavAlg;
 }
 
 void Dialog::showPaths()

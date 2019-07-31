@@ -12,10 +12,13 @@ public:
     void discretizeWorld();
     void generatePath();
     void setScene(QGraphicsScene *value);
+    void draw();
+    void clean();
 
 private:
     QuadTree *qTree;
     QGraphicsScene *scene;
+    QVector<QGraphicsEllipseItem*> dots;
 };
 
 #endif // ASTAR_H

@@ -13,6 +13,8 @@ public:
     virtual ~NavigationAlgorithm();
 
     virtual void generatePath();
+    virtual void draw();
+    virtual void clean();
     Position nextPos();
     //----- Getters and Setters -----//
     QVector<Position*> getObstacles() const;

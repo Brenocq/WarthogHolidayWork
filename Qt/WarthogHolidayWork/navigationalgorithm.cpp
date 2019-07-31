@@ -22,6 +22,16 @@ void NavigationAlgorithm::generatePath()
     path.clear();
 }
 
+void NavigationAlgorithm::draw()
+{
+
+}
+
+void NavigationAlgorithm::clean()
+{
+
+}
+
 Position NavigationAlgorithm::nextPos()
 {
     return *(path.back());

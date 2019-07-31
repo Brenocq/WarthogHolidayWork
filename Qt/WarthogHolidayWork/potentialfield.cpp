@@ -75,3 +75,13 @@ void PotentialField::generatePath()
     std::reverse(resultPath.begin(), resultPath.end());
     path = resultPath;
 }
+
+void PotentialField::draw()
+{
+
+}
+
+void PotentialField::clean()
+{
+
+}

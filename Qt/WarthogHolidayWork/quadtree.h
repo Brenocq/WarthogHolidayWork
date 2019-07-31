@@ -15,10 +15,18 @@ public:
     bool insert(QPoint *point);
     void subdivide();
     bool containPoint(QPoint *point);
+    QuadTree* getQtreeAtPoint(QPoint *point);
+    QVector<QPoint *> neighbors(QRect *rect);
+    bool intersects(QRect *rect);
+
 
     void draw();
-    void noDraw();
+    void clean();
+    //----- Getters and Setters -----//
     void setScene(QGraphicsScene *value);
+    QPoint *getCenter() const;
+    int getWidth() const;
+    int getHeight() const;
 
 private:
     // Rect info
@@ -34,6 +42,7 @@ private:
     QuadTree* southEast;
     QuadTree* southWest;
     bool isSubdivaded;
+    bool drawn;
 
     QGraphicsScene *scene;
     QGraphicsRectItem *rect;

@@ -30,13 +30,15 @@ public:
     void setPos(Position *value);
     NavigationAlgorithm *getNavAlg() const;
     void setNavAlg(NavigationAlgorithm *value);
+    int getSelectedNav() const;
+    void setSelectedNav(int value);
 
 protected:
     QGraphicsScene *scene;
     QGraphicsEllipseItem *body;
     Position* pos;
     NavigationAlgorithm *navAlg;
-
+    int selectedNav;
     int id;
     int team;
     int radius;

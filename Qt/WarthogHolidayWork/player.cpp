@@ -1,7 +1,7 @@
 #include "player.h"
 
 Player::Player(int _id, int _team):
-    id(_id), team(_team), radius(25)
+     selectedNav(0), id(_id), team(_team), radius(25)
 {
     pos = new Position(0,0,0);
     pos->setTeam(team);
@@ -78,9 +78,20 @@ NavigationAlgorithm *Player::getNavAlg() const
 
 void Player::setNavAlg(NavigationAlgorithm *value)
 {
+    navAlg->clean();
     value->setEnd(navAlg->getEnd());
     value->setStart(navAlg->getStart());
     value->setObstacles(navAlg->getObstacles());
     navAlg = value;
+}
+
+int Player::getSelectedNav() const
+{
+    return selectedNav;
+}
+
+void Player::setSelectedNav(int value)
+{
+    selectedNav = value;
 }
 

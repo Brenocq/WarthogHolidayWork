@@ -99,6 +99,7 @@ void Dialog::update(){
     // Update teams position
     teams[0]->update();
     teams[1]->update();
+    selectedRobot->getNavAlg()->draw();
     // Update UI interface
     showPaths();
 }
@@ -168,20 +169,28 @@ void Dialog::updatePathPlanning(){
 
     selectedRobot->setDestination(endPos);
     if(lastTeamNum!=teamNum || lastRobotNum!=robotNum || selectedNav!=strNavAlg){
-        if(selectedNav!=strNavAlg){
+        if(selectedNav==strNavAlg){
+            ui->navComboBox->setCurrentIndex(selectedRobot->getSelectedNav());
+        }
+
+        if(lastTeamNum!=-1){
             teams[lastTeamNum]->getRobot(lastRobotNum)->getNavAlg()->clean();
         }
 
         if(strNavAlg=="Straight Line"){
             selectedRobot->setNavAlg(new StraightLine());
+            selectedRobot->setSelectedNav(0);
         }else if(strNavAlg == "PF"){
             selectedRobot->setNavAlg(new PotentialField());
+            selectedRobot->setSelectedNav(1);
         }else if(strNavAlg == "QuadTree + A*"){
             AStar *aStar = new AStar();
             aStar->setScene(scene);
             selectedRobot->setNavAlg(aStar);
+            selectedRobot->setSelectedNav(2);
         }
     }
+
     lastTeamNum = teamNum;
     lastRobotNum = robotNum;
     selectedNav = strNavAlg;

@@ -73,9 +73,9 @@ QuadTree* QuadTree::getQtreeAtPoint(QPoint *point){
     return this;
 }
 
-QVector<QPoint *> QuadTree::neighbors(QRect *rect)
+QVector<QuadTree *> QuadTree::neighbors(QRect *rect)
 {
-    QVector<QPoint *> result;
+    QVector<QuadTree *> result;
     if(intersects(rect)){
         if(isSubdivaded){
             result+=northEast->neighbors(rect);
@@ -83,7 +83,11 @@ QVector<QPoint *> QuadTree::neighbors(QRect *rect)
             result+=southEast->neighbors(rect);
             result+=southWest->neighbors(rect);
         }else{
-            result+=center;
+            if(!(rect->x()==center->x() &&
+                 rect->y()==center->y())){
+                result+=this;
+            }
+
         }
     }
     return result;
@@ -91,10 +95,10 @@ QVector<QPoint *> QuadTree::neighbors(QRect *rect)
 
 bool QuadTree::intersects(QRect *rect)
 {
-    return !(center->x()+width/2<rect->x()-rect->width()/2 ||
-             center->x()-width/2>rect->x()+rect->width()/2 ||
-             center->y()+height/2<rect->y()-rect->height()/2 ||
-             center->y()-height/2>rect->y()+rect->height()/2
+    return !(center->x()+width/2  < rect->x()-rect->width()/2  ||
+             center->x()-width/2  > rect->x()+rect->width()/2  ||
+             center->y()+height/2 < rect->y()-rect->height()/2 ||
+             center->y()-height/2 > rect->y()+rect->height()/2
              );
 }
 
@@ -148,4 +152,9 @@ int QuadTree::getWidth() const
 int QuadTree::getHeight() const
 {
     return height;
+}
+
+QVector<QPoint *> QuadTree::getPoints() const
+{
+    return points;
 }

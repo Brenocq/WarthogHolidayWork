@@ -16,7 +16,7 @@ public:
     void subdivide();
     bool containPoint(QPoint *point);
     QuadTree* getQtreeAtPoint(QPoint *point);
-    QVector<QPoint *> neighbors(QRect *rect);
+    QVector<QuadTree *> neighbors(QRect *rect);
     bool intersects(QRect *rect);
 
 
@@ -27,6 +27,7 @@ public:
     QPoint *getCenter() const;
     int getWidth() const;
     int getHeight() const;
+    QVector<QPoint *> getPoints() const;
 
 private:
     // Rect info

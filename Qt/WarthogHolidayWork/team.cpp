@@ -13,13 +13,13 @@ Team::Team(QGraphicsScene *_scene, int _qtdRobots, int _color):
     if(qtdRobots!=4){
         qDebug() << "Please change the robots initial position in teams.cpp";
     }
-    newPos.setNewPosition(-300,0,0);
+    newPos.setNewPosition(-300,10,0);
     robots[0]->setPosition(newPos);
     newPos.setNewPosition(-150,150,-30);
     robots[1]->setPosition(newPos);
     newPos.setNewPosition(-150,-150,30);
     robots[2]->setPosition(newPos);
-    newPos.setNewPosition(-50,0,0);
+    newPos.setNewPosition(-50,10,0);
     robots[3]->setPosition(newPos);
 
 }

@@ -3,6 +3,16 @@
 #include "navigationalgorithm.h"
 #include "quadtree.h"
 
+typedef struct _node Node;
+
+struct _node{
+    QuadTree *qTree;
+    float f;
+    float g;
+    float h;
+    Node *prevNode;
+};
+
 class AStar: public NavigationAlgorithm
 {
 public:
@@ -13,12 +23,17 @@ public:
     void generatePath();
     void setScene(QGraphicsScene *value);
     void draw();
+    void drawOpenClose(QVector<Node*> openList,  QVector<Node*> closedList);
     void clean();
 
 private:
     QuadTree *qTree;
+    QVector<Node*> openList;
+    QVector<Node*> closedList;
+
     QGraphicsScene *scene;
     QVector<QGraphicsEllipseItem*> dots;
+    QVector<QGraphicsRectItem*> rectangles;
 };
 
 #endif // ASTAR_H

@@ -53,11 +53,11 @@ void Robot::draw()
 {
     Player::draw();
     if(team==blue){
-        head->setX(cos(pos->getAngle()/180*M_PI)*14);
-        head->setY(sin(pos->getAngle()/180*M_PI)*14);
+        head->setX(cos(double(pos->getAngle())/180*M_PI)*14);
+        head->setY(sin(double(pos->getAngle())/180*M_PI)*14);
     }else if(team==red){
-        head->setX(cos((pos->getAngle()-180)/180*M_PI)*14);
-        head->setY(sin((pos->getAngle()-180)/180*M_PI)*14);
+        head->setX(cos((double(pos->getAngle())-180)/180*M_PI)*14);
+        head->setY(sin((double(pos->getAngle())-180)/180*M_PI)*14);
     }
 }
 
@@ -78,6 +78,7 @@ void Robot::move(){
         moveVector = moveVector*5;// To move at least 1 pixel
         float newX = pos->getX()+moveVector.x();
         float newY = pos->getY()+moveVector.y();
+        pos->setAngle(path.back()->angleTo(*pos));
         if(team==blue){
             body->setX(int(newX));
             body->setY(int(newY));

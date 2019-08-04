@@ -10,6 +10,7 @@ struct _node{
     float f;
     float g;
     float h;
+    bool prevConnected=true;
     Node *prevNode;
 };
 

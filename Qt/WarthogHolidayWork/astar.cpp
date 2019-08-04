@@ -104,6 +104,7 @@ void AStar::generatePath()
     startNode->g=0;
     startNode->h=start->distanceTo(*end);
     startNode->f = startNode->g + startNode->h;
+    startNode->prevConnected=false;
 
     closedList.push_back(startNode);
     Node *prevNode = startNode;
@@ -140,7 +141,7 @@ void AStar::generatePath()
             if(newNode){
                 Node *nextNode = new Node;
                 nextNode->qTree=neighbor;
-                if(nextNode->qTree->getHeight()>=50){// TODO change hard code (50=robot diameter)
+                if(nextNode->qTree->getHeight()>=25){// TODO change hard code (50=robot diameter)
                     // Calcutation h
                     float deltaX;
                     float deltaY;
@@ -162,7 +163,7 @@ void AStar::generatePath()
                     deltaY = neighbor->getCenter()->y()-prevNode->qTree->getCenter()->y();
                     gPrev = float(sqrt(double(deltaX*deltaX + deltaY*deltaY)))+prevNode->g;
 
-                    if(gCurr<gPrev){
+                    if(/*gCurr<gPrev*/true){//It was walking over the obstacles
                         nextNode->g = gCurr;
                         nextNode->f = nextNode->h + nextNode->g;
                         nextNode->prevNode = currNode;
@@ -171,7 +172,6 @@ void AStar::generatePath()
                         nextNode->f = nextNode->h + nextNode->g;
                         nextNode->prevNode = prevNode;
                     }
-
                    openList.push_back(nextNode);
                 }
 
@@ -180,6 +180,9 @@ void AStar::generatePath()
 
         // Choose best node
         Node *nextNode;
+        if(openList.size()>=1){
+            nextNode = openList[0];
+        }
         float bestF=1000;
         int indexBestNode=0;
         for(int i=0;i<openList.size();i++){
@@ -201,26 +204,24 @@ void AStar::generatePath()
     done:
 
     //----- Generate path -----//
-    //if(maxItineration && startNode->qTree->getHeight()>50){
-        path+=new Position(end->getX(),end->getY(),0);
-        path+=new Position(end->getX(),end->getY(),0);
+    path+=new Position(end->getX(),end->getY(),0);
+    path+=new Position(end->getX(),end->getY(),0);
 
-        Node *pathNode = currNode;// Ignore last node
-        while(pathNode->qTree != startNode->qTree){// Ignore first node
-            Position *nextPos;
-            if(start->getTeam()==blue){
-                nextPos = new Position(pathNode->qTree->getCenter()->x(),
-                                       pathNode->qTree->getCenter()->y(),0);
-            }else{
-                nextPos = new Position(-pathNode->qTree->getCenter()->x(),
-                                       -pathNode->qTree->getCenter()->y(),0);
-            }
-
-
-            path+=nextPos;
-            pathNode = pathNode->prevNode;
+    Node *pathNode = currNode;// Ignore last node
+    while(pathNode!=0x0 && pathNode->prevConnected){// Ignore first node
+        Position *nextPos;
+        if(start->getTeam()==blue){
+            nextPos = new Position(pathNode->qTree->getCenter()->x(),
+                                   pathNode->qTree->getCenter()->y(),0);
+        }else{
+            nextPos = new Position(-pathNode->qTree->getCenter()->x(),
+                                   -pathNode->qTree->getCenter()->y(),0);
         }
-    //}
+
+        path+=nextPos;
+        pathNode = pathNode->prevNode;
+    }
+
     path+=new Position(start->getX(),start->getY(),0);
 }
 

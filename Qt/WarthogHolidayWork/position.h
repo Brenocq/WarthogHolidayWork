@@ -9,6 +9,7 @@ class Position
 public:
     Position(float _x, float _y, float _angle);
     float distanceTo(Position other);
+    float angleTo(Position other);
     QVector2D toVector();
     //----- Getters and Setters -----//
     float getX() const;

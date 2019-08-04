@@ -15,6 +15,13 @@ float Position::distanceTo(Position other)
     return float( qSqrt(qreal(dX*dX+dY*dY)) );
 }
 
+float Position::angleTo(Position other)
+{
+    double deltaX = double(x-other.getX());
+    double deltaY = double(y-other.getY());
+    return float(atan2(deltaY,deltaX)/M_PI*180);
+}
+
 QVector2D Position::toVector()
 {
     QVector2D result(getX(),getY());

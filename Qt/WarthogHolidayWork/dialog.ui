@@ -22,6 +22,12 @@
      <height>500</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
   </widget>
   <widget class="QPushButton" name="runButton">
    <property name="geometry">
@@ -155,6 +161,9 @@
    </property>
    <property name="scaledContents">
     <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignJustify|Qt::AlignVCenter</set>
    </property>
    <property name="wordWrap">
     <bool>true</bool>

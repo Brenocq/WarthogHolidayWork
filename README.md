@@ -1,8 +1,8 @@
 # Warthog Holiday Work
 
 <p align="center">
- <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/StraightLinePath.png" height="300">
- <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/PFandA*.png" height="300">
+ <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/StraightLinePath.png" height="250">
+ <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/PFandA*.png" height="250">
 </p>
 
 ## Introduction

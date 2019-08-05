@@ -1,8 +1,8 @@
 # Warthog Holiday Work
 
 <p align="center">
- <img src="https://github.com/Brenocq/WarthogHolidayWork/master/Images/StraightLinePath.png" height="300">
- <img src="https://github.com/Brenocq/WarthogHolidayWork/master/Images/PFandA*.png" height="300">
+ <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/StraightLinePath.png" height="300">
+ <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/PFandA*.png" height="300">
 </p>
 
 ## Introduction
@@ -11,7 +11,7 @@ The objective of this work is to use object orientation to simulate the pathfind
 ## OOP Classes
 
 <p align="center">
- <img src="https://github.com/Brenocq/WarthogHolidayWork/tree/Images/UMLgraph.png" height="300">
+ <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/UMLgraph.png" height="400">
 </p>
 
 The image above shows the relationships between classes.
@@ -24,13 +24,13 @@ After clicking the `Run` button, the robots will start moving along their paths.
 #### Potential Field
 
 <p align="center">
- <img src="https://github.com/Brenocq/WarthogHolidayWork/master/Images/PFPath.png" height="400">
+ <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/PFPath.png" height="400">
 </p>
 
 #### Quad-tree with A*
 
 <p align="center">
- <img src="https://github.com/Brenocq/WarthogHolidayWork/master/Images/QuadTreeAndA*Path.png" height="400">
+ <img src="https://github.com/Brenocq/WarthogHolidayWork/blob/master/Images/QuadTreeAndA*Path.png" height="400">
 </p>
 
 ## How to execute

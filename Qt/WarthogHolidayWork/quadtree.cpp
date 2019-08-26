@@ -9,6 +9,16 @@ QuadTree::QuadTree(QPoint _center, int _width, int _height, int _nodeCapacity, Q
     center->setY(_center.y());
 }
 
+QuadTree::~QuadTree()
+{
+    if(isSubdivaded){
+        delete northEast;
+        delete northWest;
+        delete southEast;
+        delete southWest;
+    }
+}
+
 bool QuadTree::insert(QPoint *point)
 {
     if(!containPoint(point)){
@@ -104,24 +114,29 @@ bool QuadTree::intersects(QRect *rect)
 
 void QuadTree::draw()
 {
-    drawn=true;
-    //qDebug()<<"("<<center->x()<<","<<center->y()<<") h:"<<height<<" w:"<<width;
-    QBrush infillBrush(QColor(0,0,0,0));// Without infill
-    QPen outlinePen(QColor(0,0,0,255));// Black
-    rect = scene->addRect(center->x()-width/2, center->y()-height/2, width, height, outlinePen, infillBrush);
+    if(!drawn){
+        QBrush infillBrush(QColor(0,0,0,0));// Without infill
+        QPen outlinePen(QColor(0,0,0,255));// Black
+        rect = scene->addRect(center->x()-width/2, center->y()-height/2, width, height, outlinePen, infillBrush);
 
-    if(isSubdivaded){
-        northEast->draw();
-        northWest->draw();
-        southEast->draw();
-        southWest->draw();
+
+        if(isSubdivaded){
+            northEast->draw();
+            northWest->draw();
+            southEast->draw();
+            southWest->draw();
+        }
     }
+    drawn=true;
 }
 
 void QuadTree::clean()
 {
     if(drawn){
-        scene->removeItem(rect);
+        if(rect->scene()!=nullptr){
+            scene->removeItem(rect);
+        }
+
 
         if(isSubdivaded){
             northEast->clean();

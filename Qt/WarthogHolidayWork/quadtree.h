@@ -11,7 +11,7 @@ class QuadTree
 {
 public:
     QuadTree(QPoint _center, int _width, int _height, int _nodeCapacity, QGraphicsScene *_scene);
-
+    ~QuadTree();
     bool insert(QPoint *point);
     void subdivide();
     bool containPoint(QPoint *point);
